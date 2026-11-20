@@ -1,0 +1,4 @@
+# Week 4 - Hourly website backups
+# This cron job runs on Server A.
+
+0 * * * * /usr/bin/flock -n /home/ubuntu/.week4-backup.lock /home/ubuntu/viikkotehtava4/backup.sh
