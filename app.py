@@ -280,6 +280,45 @@ HTML = """
         website directory.
     </p>
 </div>
+<div class="card">
+    <h2>Users and Permissions</h2>
+
+    <p>
+        I used the ubuntu user to manage
+        both servers.
+    </p>
+
+    <p>
+        I created a Linux user called webbackup
+        on Server B for the website backups.
+    </p>
+
+    <p>
+        The backup folder belongs to webbackup
+        and has permissions 700.
+    </p>
+
+    <p>
+        I used SSH keys to transfer files
+        safely between the servers.
+    </p>
+
+    <p>
+        I created a MariaDB replication user
+        called week4repl.
+    </p>
+
+    <p>
+        The replication connection is allowed
+        only from Server B's private IP address.
+    </p>
+
+    <p>
+        The Week 4 application uses the
+        week4reader database user.
+        It only has SELECT permission.
+    </p>
+</div>
 </div>
 
 </body>
