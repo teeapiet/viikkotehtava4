@@ -131,11 +131,12 @@ HTML = """
             <h2>Links</h2>
             <p>
                 <a href="http://195.148.23.163/viikko2/">
-                    Server A - Visitor Counter
+                    Server A 
                 </a>
             </p>
             <p>
-                Server B - This read-only page
+                <a href="http://86.50.231.16/viikko4/">
+                Server B 
             </p>
         </div>
 
@@ -157,10 +158,6 @@ HTML = """
             <p>
                 The application uses a database
                 account with SELECT-only access.
-            </p>
-            <p>
-                Detailed tests and GitHub source
-                code will be added here.
             </p>
         </div>
     </div>
