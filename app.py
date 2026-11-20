@@ -222,6 +222,29 @@ HTML = """
     I also checked that the backup folders
     were saved on Server B.
 </p>
+
+<h3>Backup Restore Test</h3>
+<p>
+    I restored index.html from a backup
+    to a separate folder on Server B.
+</p>
+<p>
+    I compared the SHA-256 checksums.
+    Both files had the same checksum.
+    The restore test was successful.
+</p>
+
+<h3>Reboot Test</h3>
+<p>
+    I rebooted Server B and checked
+    that Nginx, MariaDB and the
+    Week 4 Flask application started.
+</p>
+<p>
+    Database replication was still working.
+    I also checked that Server B received
+    an automatic backup after reboot.
+</p>
     </div>
 
     <div class="card">
