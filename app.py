@@ -209,6 +209,19 @@ HTML = """
             <li>Verifying that B does not increment the counter</li>
             <li>Checking services and replication after reboot</li>
         </ul>
+<h3>Hourly Backup Test</h3>
+<p>I checked the backup log on Server A.</p>
+<p>Three automatic backups were successful:</p>
+<ul>
+    <li>20.11.2026 at 02:00 UTC</li>
+    <li>20.11.2026 at 03:00 UTC</li>
+    <li>20.11.2026 at 04:00 UTC</li>
+</ul>
+<p>
+    All three showed SUCCESS in the log.
+    I also checked that the backup folders
+    were saved on Server B.
+</p>
     </div>
 
     <div class="card">
