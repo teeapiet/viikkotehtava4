@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+*.sql
+*.log
+*.pem
+*.key
+*backup_ed25519*
