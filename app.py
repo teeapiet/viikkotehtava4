@@ -249,7 +249,37 @@ HTML = """
             </a>
         </p>
     </div>
+<div class="card">
+    <h2>Storage Layout</h2>
 
+    <p>
+        Both servers have a 77 GB root
+        filesystem using ext4.
+    </p>
+
+    <p>
+        Server A: 3.3 GB used (5%).
+    </p>
+
+    <p>
+        Server B: 3.4 GB used (5%).
+    </p>
+
+    <p>
+        Server A stores the website files
+        in /var/www/html/.
+    </p>
+
+    <p>
+        Server B stores the backups in
+        /srv/backups/website/.
+    </p>
+
+    <p>
+        Backups are stored outside the public
+        website directory.
+    </p>
+</div>
 </div>
 
 </body>
@@ -287,3 +317,4 @@ def index():
     except Exception:
         app.logger.exception("Unable to read replica database")
         return render_template_string(HTML, visits=None), 503
+
