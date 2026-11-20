@@ -1,0 +1,9 @@
+[mariadb]
+server_id = 1
+log_bin = mariadb-bin
+binlog_format = ROW
+
+# Replace with Server A's private IP address.
+# Keep local database connections working as well.
+bind-address = 127.0.0.1,A_PRIVATE_IP
+

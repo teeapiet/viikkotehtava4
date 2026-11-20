@@ -1,0 +1,5 @@
+[mariadb]
+server_id = 2
+read_only = ON
+relay_log = mariadb-relay-bin
+replicate_wild_do_table = viikko2db.%
