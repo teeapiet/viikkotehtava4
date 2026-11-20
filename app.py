@@ -21,7 +21,7 @@ HTML = """
         body {
             margin: 0;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 35px 20px;
             background: linear-gradient(
                 135deg,
                 #fbd9e9,
@@ -30,6 +30,7 @@ HTML = """
             );
             color: #222;
             font-family: "Courier New", monospace;
+            line-height: 1.6;
         }
 
         .container {
@@ -37,39 +38,44 @@ HTML = """
             margin: auto;
         }
 
-        h1, h2 {
-            text-align: center;
-        }
-
         h1 {
-            font-size: 32px;
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 5px;
         }
 
         .subtitle {
             text-align: center;
+            margin-top: 0;
             margin-bottom: 30px;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 25px;
-            margin: 20px 0;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(70, 50, 90, 0.08);
+        h2 {
+            font-size: 21px;
+            margin-top: 0;
+            margin-bottom: 15px;
         }
 
-        .counter {
-            font-size: 56px;
-            font-weight: bold;
-            text-align: center;
-            margin: 15px 0;
+        .card {
+            background: rgba(255, 255, 255, 0.82);
+            padding: 25px;
+            margin-bottom: 18px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(70, 50, 90, 0.08);
         }
 
         .center {
             text-align: center;
         }
 
-        .label {
+        .counter {
+            font-size: 56px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .status {
+            color: #386a4a;
             font-weight: bold;
         }
 
@@ -77,270 +83,236 @@ HTML = """
             color: #67499c;
         }
 
-        .status {
-            font-weight: bold;
-            color: #386a4a;
+        p {
+            margin: 10px 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+
         <h1>Week 4: Server Replication</h1>
         <p class="subtitle">
-            Backups & Database Replication
+            Backups and MariaDB Replication
         </p>
 
+        <!-- 1. VISITOR COUNTER -->
+
         <div class="card center">
-            <h2>Replicated Visitor Counter</h2>
+            <h2>Visitor Counter</h2>
 
             {% if visits is not none %}
                 <div class="counter">{{ visits }}</div>
-                <p class="status">Read-only replica</p>
+                <p class="status">
+                    Read-only replica - Server B
+                </p>
             {% else %}
                 <p>Unable to read the visitor counter.</p>
             {% endif %}
 
             <p>
-                This value comes from Server B's
+                This number comes from Server B's
                 local MariaDB database.
             </p>
+
             <p>
-                Reloading this page does not
+                Refreshing this page does not
                 increase the counter.
             </p>
         </div>
 
-        <div class="card">
-            <h2>Server Information</h2>
-            <p><span class="label">Server A:</span>
-                Primary database
-            </p>
-            <p><span class="label">Server B:</span>
-                Read-only replica
-            </p>
-            <p><span class="label">Database:</span>
-                MariaDB
-            </p>
-            <p><span class="label">Backups:</span>
-                Hourly using rsync and cron
-            </p>
-        </div>
+        <!-- 2. LINKS -->
 
         <div class="card">
             <h2>Links</h2>
+
             <p>
                 <a href="http://195.148.23.163/viikko2/">
-                    Server A 
+                    Server A
                 </a>
             </p>
+
             <p>
                 <a href="http://86.50.231.16/viikko4/">
-                Server B 
+                    Server B
+                </a>
+            </p>
+
+            <p>
+                <a href="https://github.com/teeapiet/viikkotehtava4">
+                    GitHub
+                </a>
             </p>
         </div>
+
+        <!-- 3. HOW I MADE IT -->
 
         <div class="card">
-            <h2>Documentation</h2>
+            <h2>How I Made It</h2>
+
             <p>
-                Server B was created from a snapshot
+                <strong>Servers:</strong>
+                I created Server B from a snapshot
                 of Server A using CSC cPouta.
+                Both servers have their own IP address.
             </p>
+
             <p>
-                Website files are backed up from
-                Server A to Server B every hour.
+                <strong>Storage:</strong>
+                Both servers have a 77 GB ext4 filesystem.
+                Server A uses 3.3 GB and B uses 3.4 GB.
+                The website files on A are in
+                /var/www/html/.
             </p>
+
             <p>
-                MariaDB replication continuously
-                copies database changes from
-                Server A to Server B.
+                <strong>Backups:</strong>
+                I used Bash, rsync, SSH and cron
+                to back up the website files
+                from A to B every hour.
+                The files are saved in
+                /srv/backups/website/
+                in folders with timestamps.
+                This folder is not public.
             </p>
+
             <p>
-                The application uses a database
-                account with SELECT-only access.
+                <strong>Users and permissions:</strong>
+                I used the ubuntu user to manage
+                the servers. On B, webbackup owns
+                the backup folder with permissions 700.
+                I used a restricted SSH key
+                for transferring the backups.
+            </p>
+
+            <p>
+                <strong>MariaDB:</strong>
+                Server A is the primary database
+                and B is the replica.
+                I used a separate user called
+                week4repl for replication.
+                The database connection is restricted
+                to the private network.
+            </p>
+
+            <p>
+                <strong>Read-only:</strong>
+                The Week 4 Flask application uses
+                week4reader, which only has
+                SELECT permission.
+                It can read the counter
+                but cannot change it.
+            </p>
+
+            <p>
+                <strong>Why backups are needed:</strong>
+                Replication also copies mistakes.
+                Backups let me restore older files.
             </p>
         </div>
+
+        <!-- 4. TESTS -->
+
+        <div class="card">
+            <h2>Tests</h2>
+
+            <ul>
+                <li>
+                    <strong>Websites:</strong>
+                    Both A and B pages worked.
+                </li>
+
+                <li>
+                    <strong>Counter:</strong>
+                    Opening A's Week 2 page increased
+                    the counter. The new number
+                    appeared on B.
+                </li>
+
+                <li>
+                    <strong>Read-only:</strong>
+                    Refreshing only B's page
+                    did not increase the counter.
+                </li>
+
+                <li>
+                    <strong>Replication:</strong>
+                    I checked the MariaDB status.
+                    Slave_IO_Running: Yes and
+                    Slave_SQL_Running: Yes.
+                </li>
+
+                <li>
+                    <strong>Hourly backups:</strong>
+                    Three backups were successful
+                    on 20.11.2026 at
+                    02:00, 03:00 and 04:00 UTC.
+                    I checked the log and
+                    backup folders on B.
+                </li>
+
+                <li>
+                    <strong>Restore:</strong>
+                    I restored an index.html file
+                    to a separate folder on B.
+                    The SHA-256 checksums matched.
+                </li>
+
+                <li>
+                    <strong>Reboot:</strong>
+                    I restarted Server B and checked
+                    Nginx, MariaDB, the Flask application
+                    and database replication.
+                    They worked after reboot.
+                    I also checked that B received
+                    a new hourly backup.
+                </li>
+            </ul>
+        </div>
+
+        <!-- 5. PROBLEM SOLVED -->
+
+        <div class="card">
+            <h2>Problem I Solved</h2>
+
+            <p>
+                My Week 2 website stopped working
+                when I changed the MariaDB
+                bind-address setting.
+            </p>
+
+            <p>
+                I fixed it by allowing both
+                local connections and connections
+                through the private network.
+                After that, the website worked again.
+            </p>
+        </div>
+
     </div>
-
-<div class="container">
-
-    <div class="card">
-        <h2>Technical Implementation</h2>
-        <p><strong>Server A:</strong> Primary Ubuntu server,
-           running the original visitor counter.</p>
-        <p><strong>Server B:</strong> Ubuntu server cloned
-           from a CSC cPouta snapshot.</p>
-        <p><strong>Backups:</strong> Website files are copied
-           hourly from A to B using Bash, rsync, SSH and cron.</p>
-        <p><strong>Backup location:</strong>
-           /srv/backups/website/ on Server B.</p>
-        <p><strong>Database:</strong> MariaDB primary-replica
-           replication using binary logs.</p>
-        <p><strong>Read-only access:</strong>
-           The Week 4 Flask application uses a database
-           account with SELECT-only permission.</p>
-    </div>
-
-    <div class="card">
-        <h2>Commands Used</h2>
-        <p><strong>crontab -l</strong> displays the
-           hourly backup schedule.</p>
-        <p><strong>rsync -a</strong> copies website files
-           over an encrypted SSH connection.</p>
-        <p><strong>SHOW REPLICA STATUS</strong> checks
-           the MariaDB replication status.</p>
-        <p><strong>sha256sum</strong> verifies that a
-           restored file matches its backup.</p>
-        <p><strong>systemctl is-active</strong> checks
-           whether services are running.</p>
-    </div>
-
-    <div class="card">
-        <h2>Testing</h2>
-        <p>The following tests were performed:</p>
-        <ul>
-            <li>Hourly backup scheduling and backup log checks</li>
-            <li>Restoring a website file from a backup</li>
-            <li>Comparing SHA-256 checksums</li>
-            <li>Testing database replication from A to B</li>
-            <li>Verifying that B does not increment the counter</li>
-            <li>Checking services and replication after reboot</li>
-        </ul>
-<h3>Hourly Backup Test</h3>
-<p>I checked the backup log on Server A.</p>
-<p>Three automatic backups were successful:</p>
-<ul>
-    <li>20.11.2026 at 02:00 UTC</li>
-    <li>20.11.2026 at 03:00 UTC</li>
-    <li>20.11.2026 at 04:00 UTC</li>
-</ul>
-<p>
-    All three showed SUCCESS in the log.
-    I also checked that the backup folders
-    were saved on Server B.
-</p>
-
-<h3>Backup Restore Test</h3>
-<p>
-    I restored index.html from a backup
-    to a separate folder on Server B.
-</p>
-<p>
-    I compared the SHA-256 checksums.
-    Both files had the same checksum.
-    The restore test was successful.
-</p>
-
-<h3>Reboot Test</h3>
-<p>
-    I rebooted Server B and checked
-    that Nginx, MariaDB and the
-    Week 4 Flask application started.
-</p>
-<p>
-    Database replication was still working.
-    I also checked that Server B received
-    an automatic backup after reboot.
-</p>
-    </div>
-
-    <div class="card">
-        <h2>Problem Solved</h2>
-        <p>
-            During database replication setup, the Week 2
-            application temporarily lost its database
-            connection. MariaDB was configured to listen
-            on the private network address, but the local
-            application also needed access through
-            127.0.0.1.
-        </p>
-        <p>
-            I solved this by updating the bind-address
-            configuration to support both local and
-            private-network connections.
-        </p>
-    </div>
-
-    <div class="card">
-        <h2>GitHub Repository</h2>
-        <p>
-            <a href="https://github.com/teeapiet/viikkotehtava4">
-                Week 4 - Source Code and Documentation
-            </a>
-        </p>
-    </div>
-<div class="card">
-    <h2>Storage Layout</h2>
-
-    <p>
-        Both servers have a 77 GB root
-        filesystem using ext4.
-    </p>
-
-    <p>
-        Server A: 3.3 GB used (5%).
-    </p>
-
-    <p>
-        Server B: 3.4 GB used (5%).
-    </p>
-
-    <p>
-        Server A stores the website files
-        in /var/www/html/.
-    </p>
-
-    <p>
-        Server B stores the backups in
-        /srv/backups/website/.
-    </p>
-
-    <p>
-        Backups are stored outside the public
-        website directory.
-    </p>
-</div>
-<div class="card">
-    <h2>Users and Permissions</h2>
-
-    <p>
-        I used the ubuntu user to manage
-        both servers.
-    </p>
-
-    <p>
-        I created a Linux user called webbackup
-        on Server B for the website backups.
-    </p>
-
-    <p>
-        The backup folder belongs to webbackup
-        and has permissions 700.
-    </p>
-
-    <p>
-        I used SSH keys to transfer files
-        safely between the servers.
-    </p>
-
-    <p>
-        I created a MariaDB replication user
-        called week4repl.
-    </p>
-
-    <p>
-        The replication connection is allowed
-        only from Server B's private IP address.
-    </p>
-
-    <p>
-        The Week 4 application uses the
-        week4reader database user.
-        It only has SELECT permission.
-    </p>
-</div>
-</div>
-
 </body>
 </html>
 """
